@@ -15,6 +15,9 @@
     --peri: #c8d2f7;
     --peach: #f5c2b0;
     --lilac: #dccbf2;
+    --butter-light: #fcf3cc;
+    --peri-light: #e4e9fc;
+    --red: #c8402a;
     --ink: #1d1d1b;
     --soft: #5c5a55;
     --serif: "Noto Serif TC", "Songti TC", serif;
@@ -37,7 +40,7 @@
     border-bottom: 1.5px solid var(--ink);
   }
   .hero-art {
-    background: var(--butter);
+    background: var(--butter-light);
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -46,7 +49,7 @@
   }
   .hero-art svg { width: 100%; max-width: 360px; height: auto; display: block; }
   .hero-text {
-    background: var(--peri);
+    background: var(--peri-light);
     padding: 56px 48px 40px;
     display: flex;
     flex-direction: column;
@@ -78,6 +81,8 @@
     justify-content: space-between;
   }
   .voter b { font-weight: 700; }
+  .voter.need-name { border-color: var(--red); }
+  .voter.need-name, .voter.need-name .textbtn { color: var(--red); font-weight: 700; }
   .textbtn {
     background: none;
     border: none;
@@ -151,7 +156,48 @@
   .leaflet-marker-icon .lm-dot { display: block; }
 
   /* ---------- 篩選 ---------- */
-  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-bottom: 18px; }
+  .sort { display: inline-flex; align-items: center; gap: 8px; font-size: .92rem; }
+  .sort select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%231d1d1b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+    padding: 6px 38px 6px 16px;
+    font: inherit;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: .92rem;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .switch .track {
+    width: 46px; height: 26px;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    background: #fff;
+    position: relative;
+    transition: background .15s;
+  }
+  .switch .knob {
+    position: absolute; top: 3px; left: 3px;
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    background: var(--ink);
+    transition: left .15s, background .15s;
+  }
+  .switch[aria-checked="true"] .track { background: var(--red); }
+  .switch[aria-checked="true"] .knob { left: 23px; background: #fff; }
   .chip {
     border: 1.5px solid var(--ink);
     background: #fff;
@@ -194,7 +240,7 @@
     line-height: 1.9;
     background: #fff;
   }
-  .pool.yes { background: var(--butter); }
+  .pool.yes { background: var(--red); color: #fff; font-weight: 700; }
   .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .name { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; margin: 0; line-height: 1.35; }
   .name a { text-decoration: none; }
@@ -247,7 +293,7 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .done-btn.on { background: var(--ink); color: #fff; }
+  .done-btn.on { background: var(--ink); color: #fff; cursor: default; }
   .done-list { font-size: .92rem; margin: 16px auto 0 !important; }
   .notes { font-size: .88rem; color: var(--soft); margin-top: 28px; }
   footer {
@@ -365,7 +411,7 @@
 
 <main>
   <div class="voter">
-    <div id="voterText">先填名字，再按 ♡</div>
+    <div id="voterText">請先填名字，再按 ♡</div>
     <button class="textbtn" id="changeName">填名字</button>
   </div>
 
@@ -405,9 +451,17 @@
 
   <h2>10 間候選住宿</h2>
   <div class="toolbar">
-    <button class="chip on" data-sort="default">照區域</button>
-    <button class="chip" data-sort="price">價格低到高</button>
-    <button class="chip" id="poolOnly" aria-pressed="false">只看有泳池</button>
+    <label class="sort">
+      <span>排序</span>
+      <select id="sortSelect">
+        <option value="default">照區域</option>
+        <option value="price">價格低到高</option>
+        <option value="priceDesc">價格高到低</option>
+      </select>
+    </label>
+    <button class="switch" id="poolOnly" role="switch" aria-checked="false">
+      <span class="track"><span class="knob"></span></span>只看有泳池
+    </button>
   </div>
   <div class="grid" id="grid"></div>
 
@@ -675,8 +729,9 @@ async function toggleDone() {
     askName();
     return;
   }
-  const on = !imDone();
-  if (on && myCount() === 0) {
+  if (imDone()) return;
+  const on = true;
+  if (myCount() === 0) {
     alert("你還沒按任何一間 ♡，先選喜歡的住宿再按「我投好了」。");
     return;
   }
@@ -695,7 +750,8 @@ async function toggleDone() {
 function renderDone() {
   const btn = document.getElementById("doneBtn");
   btn.classList.toggle("on", imDone());
-  btn.textContent = imDone() ? "✓ 已投好（再按一次可取消）" : "我投好了";
+  btn.textContent = imDone() ? "✓ 已投好，謝謝！" : "我投好了";
+  btn.disabled = imDone();
   document.getElementById("doneList").innerHTML = done.length
     ? "已投好（" + done.length + " 人）：" + done.map(esc).join("、")
     : "";
@@ -724,14 +780,15 @@ document.getElementById("changeName").addEventListener("click", askName);
 function renderVoter() {
   const el = document.getElementById("voterText");
   const btn = document.getElementById("changeName");
+  document.querySelector(".voter").classList.toggle("need-name", !voter);
   if (voter) {
     const left = MAX_VOTES - myCount();
     el.innerHTML = "嗨 <b>" + esc(voter) + "</b>，" + (imDone()
-      ? "你已經投好了（還可以再改）"
+      ? "你已經投好了"
       : "你還可以按 <b>" + left + "</b> 間");
     btn.textContent = "換名字";
   } else {
-    el.textContent = "先填名字，再按 ♡";
+    el.textContent = "請先填名字，再按 ♡";
     btn.textContent = "填名字";
   }
 }
@@ -831,6 +888,7 @@ function render() {
   let list = STAYS.slice();
   if (poolOnly) list = list.filter((s) => s.pool);
   if (sortBy === "price") list.sort((a, b) => a.perNight - b.perNight);
+  if (sortBy === "priceDesc") list.sort((a, b) => b.perNight - a.perNight);
 
   document.getElementById("grid").innerHTML = list.map((s) => {
     const names = votes[s.key] || [];
@@ -868,18 +926,13 @@ function render() {
   }).join("");
 }
 
-document.querySelectorAll(".chip[data-sort]").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".chip[data-sort]").forEach((b) => b.classList.remove("on"));
-    btn.classList.add("on");
-    sortBy = btn.dataset.sort;
-    render();
-  });
+document.getElementById("sortSelect").addEventListener("change", (e) => {
+  sortBy = e.target.value;
+  render();
 });
 document.getElementById("poolOnly").addEventListener("click", (e) => {
   poolOnly = !poolOnly;
-  e.currentTarget.classList.toggle("on", poolOnly);
-  e.currentTarget.setAttribute("aria-pressed", String(poolOnly));
+  e.currentTarget.setAttribute("aria-checked", String(poolOnly));
   render();
 });
 
