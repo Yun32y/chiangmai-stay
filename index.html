@@ -301,7 +301,6 @@
   .finish h2 { margin-top: 18px; }
   .finish p { margin: 0 auto 16px; max-width: 560px; }
   .finish p span { display: inline-block; }
-  .done-list:empty { display: none; }
   .done-btn {
     border: 1.5px solid var(--ink);
     background: var(--butter);
@@ -314,7 +313,6 @@
     cursor: pointer;
   }
   .done-btn.on { background: var(--ink); color: #fff; cursor: default; }
-  .done-list { font-size: .92rem; margin: 16px auto 0 !important; }
   .notes { font-size: .88rem; color: var(--soft); margin-top: 28px; }
   footer {
     margin-top: 40px;
@@ -533,7 +531,6 @@
     <h2>投好了嗎？</h2>
     <p><span>選好後按下面的按鈕，</span><span>讓里長知道你投完了。</span></p>
     <button class="done-btn" id="doneBtn">我投好了</button>
-    <p class="done-list" id="doneList"></p>
   </section>
 
   <div class="notes">
@@ -740,8 +737,8 @@ const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 const roomUrl = (s) => "https://www.airbnb.com.tw/rooms/" + s.room + "?adults=8&check_in=2027-01-15&check_out=2027-01-18";
 
 // ---------- 投票 ----------
-let votes = {};            // key -> [名字]
-let done = [];             // 按了「我投好了」的名字
+let votes = {};            // key -> [名字]，收票程式只回傳自己的票
+let done = [];             // 自己按了「我投好了」就會有自己的名字
 let voter = localStorage.getItem("cm-voter") || "";
 
 const myVote = (key) => (votes[key] || []).includes(voter);
@@ -765,7 +762,8 @@ function renderAll() {
 async function loadVotes() {
   if (!VOTE_API) return;
   try {
-    await callApi({ action: "list" });
+    if (!voter) return;
+    await callApi({ action: "list", name: voter });
     renderAll();
   } catch (e) {
     console.warn(e);
@@ -825,9 +823,6 @@ function renderDone() {
   btn.classList.toggle("on", imDone());
   btn.textContent = imDone() ? "✓ 已投好，謝謝！" : "我投好了";
   btn.disabled = imDone();
-  document.getElementById("doneList").innerHTML = done.length
-    ? "已投好（" + done.length + " 人）：" + done.map(esc).join("、")
-    : "";
 }
 document.getElementById("doneBtn").addEventListener("click", toggleDone);
 
@@ -845,7 +840,10 @@ document.getElementById("nameForm").addEventListener("submit", () => {
   if (v) {
     voter = v;
     localStorage.setItem("cm-voter", v);
+    votes = {};
+    done = [];
     renderAll();
+    loadVotes();
   }
 });
 document.getElementById("changeName").addEventListener("click", askName);
@@ -965,7 +963,6 @@ function render() {
   if (sortBy === "priceDesc") list.sort((a, b) => b.perNight - a.perNight);
 
   document.getElementById("grid").innerHTML = list.map((s) => {
-    const names = votes[s.key] || [];
     const mine = myVote(s.key);
     return (
       '<article class="card" id="card-' + s.key + '">' +
@@ -989,9 +986,9 @@ function render() {
           (s.notes.length ? "<details><summary>挑選前要注意</summary><ul>" + s.notes.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul></details>" : "") +
           '<div class="actions">' +
             '<button class="heart' + (mine ? " on" : "") + '" onclick="toggleVote(\'' + s.key + "')\">" +
-              (mine ? "♥" : "♡") + " " + names.length +
+              (mine ? "♥ 已選" : "♡ 選這間") +
             "</button>" +
-            '<span class="voters">' + esc(names.join("、")) + "</span>" +
+            '<span class="voters"></span>' +
             '<button class="textbtn maplink" onclick="showOnMap(' + s.no + ')">在地圖上看</button>' +
           "</div>" +
         "</div>" +
