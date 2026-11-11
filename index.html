@@ -6,7 +6,7 @@
 <title>一起挑清邁的家｜2027/1/15–1/18</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Huninn&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root {
@@ -20,7 +20,7 @@
     --red: #c8402a;
     --ink: #1d1d1b;
     --soft: #5c5a55;
-    --serif: "Noto Serif TC", "Songti TC", serif;
+    --serif: "Huninn", "PingFang TC", sans-serif;
     --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   }
   * { box-sizing: border-box; }
@@ -32,24 +32,33 @@
     line-height: 1.65;
   }
   a { color: inherit; }
+  /* 整頁一片柔和漸層：奶油黃、粉橘、淡粉藍暈開，捲動時固定不動 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 60% 55% at 8% 90%, rgba(247, 227, 138, .75), transparent 70%),
+      radial-gradient(ellipse 50% 45% at 50% 60%, rgba(245, 194, 176, .7), transparent 70%),
+      radial-gradient(ellipse 55% 50% at 80% 100%, rgba(242, 184, 204, .55), transparent 70%),
+      radial-gradient(ellipse 60% 55% at 95% 10%, rgba(200, 210, 247, .85), transparent 70%),
+      linear-gradient(120deg, var(--butter-light), var(--cream) 45%, var(--peri-light));
+  }
 
   /* ---------- 開頭 ---------- */
   .hero {
     display: grid;
     grid-template-columns: 1fr 1.15fr;
-    border-bottom: 1.5px solid var(--ink);
   }
   .hero-art {
-    background: var(--butter-light);
     display: flex;
     align-items: flex-end;
     justify-content: center;
     padding: 32px 24px 0;
-    border-right: 1.5px solid var(--ink);
   }
   .hero-art svg { width: 100%; max-width: 360px; height: auto; display: block; }
   .hero-text {
-    background: var(--peri-light);
     padding: 56px 48px 40px;
     display: flex;
     flex-direction: column;
@@ -64,15 +73,16 @@
     letter-spacing: .02em;
   }
   .squiggle { display: block; width: 210px; height: 14px; margin: 6px 0 0 4px; }
-  .hero-text .rule { border: none; border-top: 1.5px dotted var(--ink); margin: 28px 0 14px; }
+  .hero-text .rule { border: none; margin: 18px 0 4px; }
   .hero-text p { margin: 0; font-size: 1rem; }
 
   main { max-width: 1120px; margin: 0 auto; padding: 28px 20px 8px; }
 
   .voter {
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid transparent;
     border-radius: 999px;
-    background: #fff;
+    background: rgba(255, 255, 255, .7);
+    box-shadow: 0 4px 18px rgba(120, 100, 140, .1);
     padding: 10px 22px;
     display: flex;
     flex-wrap: wrap;
@@ -106,7 +116,7 @@
   #map {
     height: 440px;
     border-radius: 18px;
-    border: 1.5px solid var(--ink);
+    box-shadow: 0 6px 24px rgba(120, 100, 140, .15);
   }
   #map .leaflet-tile-pane { filter: saturate(.55) brightness(1.06); }
   .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
@@ -120,7 +130,7 @@
     background: var(--c, #fff);
   }
   .areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 14px; }
-  .area-card { background: var(--c); border: 1.5px solid var(--ink); border-radius: 18px; padding: 14px 18px; }
+  .area-card { background: color-mix(in srgb, var(--c) 70%, transparent); border-radius: 18px; padding: 14px 18px; }
   .area-card h3 { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 6px; }
   .area-card h3 span { font-family: var(--sans); font-size: .8rem; font-weight: 400; margin-left: 4px; }
   .area-card p { margin: 0; font-size: .92rem; }
@@ -129,6 +139,16 @@
   .lm-dot.sight { background: var(--ink); border-radius: 50%; }
   .lm-dot.market { background: var(--butter); border-radius: 50%; }
   .lm-dot.mall { background: #fff; border-radius: 2px; }
+  .lm-dot.airport {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    font-style: normal;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+  }
+  .lm-dot.airport::before { content: "✈"; }
   .map-note { font-size: .88rem; color: var(--soft); margin: 10px 0 0; }
   .pin {
     width: 30px; height: 30px;
@@ -213,8 +233,8 @@
   /* ---------- 卡片 ---------- */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 22px; }
   .card {
-    background: #fff;
-    border: 1.5px solid var(--ink);
+    background: rgba(255, 255, 255, .8);
+    box-shadow: 0 6px 24px rgba(120, 100, 140, .14);
     border-radius: 20px;
     overflow: hidden;
     display: flex;
@@ -222,7 +242,7 @@
     scroll-margin-top: 16px;
   }
   .card.flash { outline: 4px solid var(--butter); outline-offset: 2px; }
-  .photo { position: relative; border-bottom: 1.5px solid var(--ink); }
+  .photo { position: relative; }
   .photo img { width: 100%; height: 210px; object-fit: cover; display: block; background: #eee; }
   .num {
     position: absolute; top: 12px; left: 12px;
@@ -247,11 +267,11 @@
   .name a:hover { text-decoration: underline; }
   .price { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
   .price small { font-family: var(--sans); font-size: .82rem; color: var(--soft); font-weight: 400; display: block; margin-top: 2px; }
-  .facts { font-size: .92rem; border-top: 1.5px dotted var(--ink); padding-top: 10px; margin: 2px 0 0; }
+  .facts { font-size: .92rem; padding-top: 4px; margin: 2px 0 0; }
   .facts div { display: grid; grid-template-columns: 3.2em 1fr; gap: 8px; margin: 3px 0; }
   .facts dt { color: var(--soft); }
   .facts dd { margin: 0; }
-  details { font-size: .9rem; border: 1.5px dashed var(--ink); border-radius: 12px; padding: 6px 12px; }
+  details { font-size: .9rem; background: rgba(247, 227, 138, .25); border-radius: 12px; padding: 6px 12px; }
   details summary { cursor: pointer; }
   details ul { margin: 6px 0 2px; padding-left: 18px; }
   .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: auto; padding-top: 10px; }
@@ -272,8 +292,8 @@
 
   .finish {
     margin-top: 40px;
-    background: var(--peri-light);
-    border: 1.5px solid var(--ink);
+    background: rgba(255, 255, 255, .55);
+    box-shadow: 0 6px 24px rgba(120, 100, 140, .12);
     border-radius: 20px;
     padding: 6px 24px 22px;
     text-align: center;
@@ -298,8 +318,6 @@
   .notes { font-size: .88rem; color: var(--soft); margin-top: 28px; }
   footer {
     margin-top: 40px;
-    border-top: 1.5px solid var(--ink);
-    background: var(--butter);
     text-align: center;
     font-size: .8rem;
     padding: 18px 16px 26px;
@@ -336,15 +354,19 @@
   }
 
   img { max-width: 100%; }
+  /* 粉圓體只有一種粗細，標題不再加粗，免得被瀏覽器硬加粗變糊 */
+  .hero-text h1, h2, .area-card h3, .name, .price, dialog b { font-weight: 400; }
   @media (max-width: 720px) {
     main { padding: 20px 16px 8px; }
     h2 { font-size: 1.4rem; margin: 34px 0 12px; }
     .finish { padding: 4px 16px 20px; }
     .done-btn { width: 100%; max-width: 320px; }
     .hero { grid-template-columns: 1fr; }
-    .hero-art { border-right: none; border-bottom: 1.5px solid var(--ink); padding-top: 24px; }
+    .hero-art { padding-top: 24px; }
     .hero-art svg { max-width: 260px; }
     .hero-text { padding: 32px 24px 28px; }
+    .hero-text { text-align: center; align-items: center; }
+    .squiggle { margin: 6px auto 0; }
     .voter { border-radius: 18px; }
     #map { height: 420px; }
   }
@@ -450,7 +472,7 @@
       <path d="M2 8 C20 2 30 14 48 8 C66 2 76 14 94 8 C112 2 122 14 140 8 C158 2 168 14 186 8 C196 5 202 7 208 8" />
     </svg>
     <hr class="rule">
-    <p>2027/1/15（五）– 1/18（一）・3 晚・8 人</p>
+    <p>2027/1/15（五）– 1/18（一）・3 晚</p>
     <p>喜歡哪間就按 ♡，每人最多 5 間。</p>
   </div>
 </section>
@@ -475,10 +497,6 @@
       <h3>古城南 <span>瓦萊路 Wualai</span></h3>
       <p>古城南門（清邁門）外的老社區，以銀器街和銀廟出名，每週六傍晚整條瓦萊路變成週六夜市。走路就到古城。</p>
     </div>
-    <div class="area-card" style="--c: var(--lilac)">
-      <h3>夜市區 <span>長康路 Chang Khlan</span></h3>
-      <p>古城東邊、靠近濱河，清邁夜市（Night Bazaar）每晚都開，附近有瓦洛洛市場。逛夜市、買伴手禮最方便。</p>
-    </div>
   </div>
   <p class="map-note">市區之間叫 Grab 或 Bolt 都不貴，古城到尼曼一趟大約 60–90 泰銖（泰銖和台幣約 1:1），上下班尖峰會加價，以 App 顯示為準。</p>
 
@@ -487,11 +505,11 @@
   <div class="legend">
     <span class="tag" style="--c: var(--peach)">古城區</span>
     <span class="tag" style="--c: var(--butter)">古城南</span>
-    <span class="tag" style="--c: var(--lilac)">夜市區</span>
     <span class="tag" style="--c: var(--peri)">尼曼區</span>
     <span class="lm-key"><i class="lm-dot sight"></i>景點</span>
     <span class="lm-key"><i class="lm-dot market"></i>夜市・市集</span>
     <span class="lm-key"><i class="lm-dot mall"></i>商場</span>
+    <span class="lm-key"><i class="lm-dot airport"></i>機場</span>
   </div>
   <p class="map-note">位置是 Airbnb 公開的大概位置，確切地址訂房後才會知道，可能差幾百公尺。點數字可以看照片和價格。</p>
 
@@ -513,13 +531,13 @@
 
   <section class="finish">
     <h2>投好了嗎？</h2>
-    <p><span>每按一次 ♡ 就已經存好了，</span><span>選幾間都可以，最多 5 間。</span><br><span>選好後按下面的按鈕，</span><span>讓里長知道你投完了。</span></p>
+    <p><span>選好後按下面的按鈕，</span><span>讓里長知道你投完了。</span></p>
     <button class="done-btn" id="doneBtn">我投好了</button>
     <p class="done-list" id="doneList"></p>
   </section>
 
   <div class="notes">
-    <p>每人每晚價格 = 3 晚總價 ÷ 8 人 ÷ 3 晚，四捨五入到元；總價是 2027/1/15–1/18、8 人在 Airbnb 查到的價格，實際以訂房時為準。</p>
+    <p>8 人中有 1 人 1/17 晚上去機場、只住 2 晚，所以按住幾晚分攤：每人每晚價格 = 3 晚總價 ÷ 23（7 人 × 3 晚 + 1 人 × 2 晚），四捨五入到元。住 3 晚的人付 3 晚份、住 2 晚的人付 2 晚份。總價是 2027/1/15–1/18、8 人在 Airbnb 查到的價格，實際以訂房時為準。</p>
   </div>
 </main>
 
@@ -587,7 +605,7 @@ const STAYS = [
     walk: "1 分鐘到週日步行街（夜市），寺廟、咖啡館、按摩店都在門外",
     drive: "到尼曼約 10–15 分鐘",
     feature: "翻新整棟房屋，全套廚房",
-    rating: "4.98（112 則），排名前 10%",
+    rating: "4.98（112 則），Airbnb 前 10% 房源（評分、評價、房東可靠度都很好）",
     notes: [
       "床位：3 間各 1 張特大雙人床，2 間各 2 張單人床。",
       "只有路邊停車（附近好找）。",
@@ -604,7 +622,7 @@ const STAYS = [
     feature: "熱帶風精品民宿，泳池＋戶外酒吧、室內餐酒吧和餐廳；免費接機、每天清潔房間",
     rating: "4.86（7 則）",
     notes: [
-      "這是 4 間客房的精品民宿，泳池、酒吧、餐廳是公共區域。要整棟包下、泳池只給我們用，可能要另外跟房東談，訂之前要確認這個總價是不是包整棟。",
+      "包棟可以享用房間、游泳池、酒吧區域（戶外和室內）以及整套房源。",
       "床位：臥室 1、2 各 1 張特大雙人床加 2 張單人床，臥室 3 一張雙人床，臥室 4 一張特大雙人床加 3 張單人床。",
       "早餐每人 350 泰銖，洗衣服務 450 泰銖。",
       "1/14 前可免費取消。",
@@ -626,20 +644,20 @@ const STAYS = [
     ],
   },
   {
-    key: "entirehome", name: "Entire home", room: "1320313639528861325",
-    img: "https://a0.muscache.com/im/pictures/hosting/Hosting-1320313639528861325/original/5cb8bec0-3830-4878-b6d5-b3911620e39d.jpeg?im_w=720",
-    area: "bazaar", areaNote: "長康路", pool: true, total: 79198, lat: 18.7737, lng: 98.9976,
-    rooms: "6 房・6 床・7 衛，最多 12 人",
-    time: "15:00 入住・11:00 前退房",
-    walk: "800 公尺到清邁夜市（Night Bazaar），200 公尺到 Curve 廣場；古城 1 公里",
-    drive: "到尼曼約 5 公里",
-    feature: "1300 平方公尺蘭納風花園別墅，6×11 公尺大泳池（有兒童淺水區），每日清潔",
-    rating: "4.96（81 則）",
+    key: "mavieng", name: "Mavieng 私人別墅", room: "1522281987320815659",
+    img: "https://a0.muscache.com/im/pictures/hosting/Hosting-1522281987320815659/original/b8047736-0da4-45ee-a0d1-d3732dffea7c.png?im_w=720",
+    area: "old", areaNote: "古城北邊外 500 公尺（Santitham）", pool: false, total: 38002, lat: 18.8035, lng: 98.98106,
+    rooms: "4 房・6 床・4.5 衛，最多 8 人",
+    time: "15:00 入住・11:00 前退房（密碼鎖自助入住）",
+    walk: "500 公尺到古城護城河，10 分鐘到塔寧市場，3 分鐘到 7-11，隔壁有咖啡廳和甜甜圈店",
+    drive: "到尼曼約 5–10 分鐘",
+    feature: "兩層樓蘭納手工藝風房子，免費停車",
+    rating: "4.98（42 則），旅客精選",
     notes: [
-      "到尼曼比較遠，但到夜市和古城都很近。",
-      "6 間臥室各 1 張 1.8 米大床。",
-      "早上 8 點有人在花園澆水（不進屋）；泳池燈 22:00 關，22:00 後要安靜。",
-      "早餐要付費，前一天預約。",
+      "床位：臥室 1、3 各 1 張雙人床加 1 張單人床，臥室 2 一張特大雙人床，臥室 4 一張雙人床。",
+      "晚上 11 點到早上 7 點要安靜，不能開派對。",
+      "沒有每日清潔。有評價提到二樓房間冷氣主機聲音大、床偏硬。",
+      "1/10 前可免費取消。",
     ],
   },
   {
@@ -653,21 +671,6 @@ const STAYS = [
     feature: "頂樓看得到城市景觀",
     rating: "4.96（26 則），各項評分都是 5.0",
     notes: [
-    ],
-  },
-  {
-    key: "villa1968", name: "Villa 1968", room: "53743840",
-    img: "https://a0.muscache.com/im/pictures/hosting/Hosting-53743840/original/f71e17bc-f264-478a-9e19-191ceb82d971.jpeg?im_w=720",
-    area: "nimman", areaNote: "尼曼路 1 巷", pool: true, total: 79877, lat: 18.79885, lng: 98.96909,
-    rooms: "4 房・6 床・5 衛，最多 8 人",
-    time: "15:00 入住・12:00 前退房",
-    walk: "1 分鐘到 One Nimman、3 分鐘到 Maya 購物中心",
-    drive: "到古城約 10 分鐘",
-    feature: "豪華獨棟別墅，私人泳池＋烤肉架",
-    rating: "5.0（24 則），旅客精選",
-    notes: [
-      "床位：2 間各 1 張特大雙人床，2 間各 2 張單人床。",
-      "評價有 3 則提到噪音，在意可以點進評價看。",
     ],
   },
   {
@@ -696,7 +699,7 @@ const STAYS = [
     feature: "現代風獨棟房屋，泳池＋山谷景觀",
     rating: "4.96（26 則）",
     notes: [
-      "床位：臥室 1 有 2 張特大雙人床，臥室 2、3 各 1 張雙人床，8 人剛好住滿，4 對都要睡同一張床。",
+      "床位：臥室 1 有 2 張特大雙人床，臥室 2、3 各 1 張雙人床。",
     ],
   },
   {
@@ -710,7 +713,7 @@ const STAYS = [
     feature: "520 平方公尺泰北蘭納風別墅，私人鹽水泳池，撞球桌＋卡拉 OK",
     rating: "4.93（67 則）",
     notes: [
-      "床位：臥室 1 有 2 張單人床，另外三間各 1 張雙人床，8 人住要有 3 對睡同一張床。",
+      "床位：臥室 1 有 2 張單人床，另外三間各 1 張雙人床。",
       "晚上 10 點後要安靜，不能開派對。",
       "抵達前要給房東每位房客的護照照片。",
       "不能提早入住，也不能寄放行李。",
@@ -718,9 +721,18 @@ const STAYS = [
   },
 ];
 
+const PERSON_NIGHTS = 7 * 3 + 1 * 2;
+
+// 照區域排，同一區價格低到高；編號跟著這個順序
+const AREA_ORDER = Object.keys(AREA);
+STAYS.sort((a, b) => AREA_ORDER.indexOf(a.area) - AREA_ORDER.indexOf(b.area) || a.total - b.total);
+
 STAYS.forEach((s, i) => {
   s.no = i + 1;
-  s.perNight = Math.round(s.total / 8 / 3);
+  // 7 人住 3 晚、1 人住 2 晚，共 23 個「人晚」
+  s.perNight = Math.round(s.total / PERSON_NIGHTS);
+  s.pay3 = Math.round(s.total * 3 / PERSON_NIGHTS);
+  s.pay2 = Math.round(s.total * 2 / PERSON_NIGHTS);
 });
 
 const fmt = (n) => "NT$" + n.toLocaleString("en-US");
@@ -897,13 +909,14 @@ const LANDMARKS = [
   { name: "雨樹手工市集", type: "market", lat: 18.78622, lng: 99.04922, dir: "left" },
   { name: "清邁大學夜市", type: "market", lat: 18.80834, lng: 98.95632, dir: "left" },
   { name: "藝術村 Baan Kang Wat", type: "sight", lat: 18.77675, lng: 98.94826, dir: "right" },
+  { name: "清邁機場", type: "airport", lat: 18.76899, lng: 98.96812, dir: "bottom" },
 ];
 LANDMARKS.forEach((m) => {
   const icon = L.divIcon({
     className: "",
     html: '<i class="lm-dot ' + m.type + '"></i>',
-    iconSize: [15, 15],
-    iconAnchor: [7, 7],
+    iconSize: m.type === "airport" ? [26, 26] : [15, 15],
+    iconAnchor: m.type === "airport" ? [13, 13] : [7, 7],
   });
   L.marker([m.lat, m.lng], { icon, zIndexOffset: -100 })
     .addTo(map)
@@ -964,7 +977,7 @@ function render() {
         '<div class="body">' +
           '<p class="name"><a href="' + roomUrl(s) + '" target="_blank" rel="noopener">' + esc(s.name) + " ↗</a></p>" +
           '<span class="tag" style="--c:' + AREA[s.area].color + ';width:fit-content">' + AREA[s.area].label + "・" + esc(s.areaNote) + "</span>" +
-          '<div class="price">' + fmt(s.perNight) + "<small>每人每晚・3 晚總價 " + fmt(s.total) + "</small></div>" +
+          '<div class="price">' + fmt(s.perNight) + "<small>每人每晚・3 晚總價 " + fmt(s.total) + "<br>住 3 晚每人 " + fmt(s.pay3) + "・住 2 晚 " + fmt(s.pay2) + "</small></div>" +
           '<dl class="facts">' +
             fact("房型", s.rooms) +
             fact("時間", s.time) +
@@ -997,7 +1010,7 @@ document.getElementById("poolOnly").addEventListener("click", (e) => {
   render();
 });
 
-document.getElementById("stayCount").textContent = STAYS.length + " 間候選住宿";
+document.getElementById("stayCount").textContent = STAYS.length + "間候選住宿";
 renderAll();
 loadVotes();
 setInterval(loadVotes, 30000);
