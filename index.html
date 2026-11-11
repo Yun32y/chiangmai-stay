@@ -264,6 +264,7 @@
   .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .name { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; margin: 0; line-height: 1.35; }
   .name a { text-decoration: none; }
+  .sold { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 0 10px; border-radius: 999px; background: var(--red); color: #fff; font-family: var(--sans); font-size: .8rem; font-weight: 700; line-height: 1.8; }
   .name a:hover { text-decoration: underline; }
   .price { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
   .price small { font-family: var(--sans); font-size: .82rem; color: var(--soft); font-weight: 400; display: block; margin-top: 2px; }
@@ -287,6 +288,7 @@
     white-space: nowrap;
   }
   .heart.on { background: var(--peach); }
+  .heart:disabled { border-color: #b9b5ad; color: #9a968f; background: #f1efea; cursor: not-allowed; }
   .voters { font-size: .85rem; color: var(--soft); flex: 1; }
   .maplink { font-size: .88rem; white-space: nowrap; }
 
@@ -580,7 +582,7 @@ const STAYS = [
     ],
   },
   {
-    key: "jjmuji", name: "JJ Muji house", room: "1175820792852008897",
+    key: "jjmuji", name: "JJ Muji house", room: "1175820792852008897", soldOut: true,
     img: "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTE3NTgyMDc5Mjg1MjAwODg5Nw%3D%3D/original/a3c63b73-d5e6-40ab-871e-77dbaebf8cdc.jpeg?im_w=720",
     area: "old", areaNote: "東北角", pool: false, total: 30270, lat: 18.7939, lng: 98.9918,
     rooms: "3 房・5 床・4 衛，最多 8 人",
@@ -776,6 +778,7 @@ async function toggleVote(key) {
     return;
   }
   const on = !myVote(key);
+  if (on && STAYS.find((s) => s.key === key).soldOut) return;
   if (on && myCount() >= MAX_VOTES) {
     alert("每人最多按 " + MAX_VOTES + " 間，先取消一間再按。");
     return;
@@ -972,7 +975,7 @@ function render() {
           '<div class="pool' + (s.pool ? " yes" : "") + '">' + (s.pool ? "有泳池" : "無泳池") + "</div>" +
         "</div>" +
         '<div class="body">' +
-          '<p class="name"><a href="' + roomUrl(s) + '" target="_blank" rel="noopener">' + esc(s.name) + " ↗</a></p>" +
+          '<p class="name"><a href="' + roomUrl(s) + '" target="_blank" rel="noopener">' + esc(s.name) + " ↗</a>" + (s.soldOut ? '<span class="sold">已無法預訂</span>' : "") + "</p>" +
           '<span class="tag" style="--c:' + AREA[s.area].color + ';width:fit-content">' + AREA[s.area].label + "・" + esc(s.areaNote) + "</span>" +
           '<div class="price">' + fmt(s.perNight) + "<small>每人每晚・3 晚總價 " + fmt(s.total) + "<br>住 3 晚每人 " + fmt(s.pay3) + "・住 2 晚 " + fmt(s.pay2) + "</small></div>" +
           '<dl class="facts">' +
@@ -985,8 +988,8 @@ function render() {
           "</dl>" +
           (s.notes.length ? "<details><summary>挑選前要注意</summary><ul>" + s.notes.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul></details>" : "") +
           '<div class="actions">' +
-            '<button class="heart' + (mine ? " on" : "") + '" onclick="toggleVote(\'' + s.key + "')\">" +
-              (mine ? "♥ 已選" : "♡ 選這間") +
+            '<button class="heart' + (mine ? " on" : "") + '"' + (s.soldOut && !mine ? " disabled" : "") + ' onclick="toggleVote(\'' + s.key + "')\">" +
+              (mine ? "♥ 已選" : s.soldOut ? "♡ 不能選" : "♡ 選這間") +
             "</button>" +
             '<span class="voters"></span>' +
             '<button class="textbtn maplink" onclick="showOnMap(' + s.no + ')">在地圖上看</button>' +
