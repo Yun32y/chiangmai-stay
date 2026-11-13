@@ -6,136 +6,184 @@
 <title>一起挑清邁的家｜2027/1/15–1/18</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Huninn&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=IBM+Plex+Mono&family=Noto+Serif+Thai:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root {
-    --cream: #fbf7ee;
+    --cream: #f7f1df;      /* 米黃 */
+    --blush: #dfe9d3;      /* 淺綠色帶 */
+    --accent: #4a7254;     /* 葉綠：按鈕、價格 */
+    --wine: #a3243b;
     --butter: #f7e38a;
     --peri: #c8d2f7;
     --peach: #f5c2b0;
-    --lilac: #dccbf2;
-    --butter-light: #fcf3cc;
-    --peri-light: #e4e9fc;
-    --red: #c8402a;
-    --ink: #1d1d1b;
-    --soft: #5c5a55;
-    --serif: "Huninn", "PingFang TC", sans-serif;
-    --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    --ink: #2b2522;
+    --soft: #6f655e;
+    --glow: 0 0 38px rgba(140, 175, 130, .35);
+    --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+    --deco: "Cinzel Decorative", "Noto Serif TC", serif;
+    --mono: "IBM Plex Mono", "Noto Serif Thai", "Noto Serif TC", monospace;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: var(--sans);
+    font-family: var(--serif);
     background: var(--cream);
     color: var(--ink);
-    line-height: 1.65;
+    line-height: 1.75;
+    overflow-x: clip;
   }
   a { color: inherit; }
-  /* 整頁一片柔和漸層：奶油黃、粉橘、淡粉藍暈開，捲動時固定不動 */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background:
-      radial-gradient(ellipse 60% 55% at 8% 90%, rgba(247, 227, 138, .75), transparent 70%),
-      radial-gradient(ellipse 50% 45% at 50% 60%, rgba(245, 194, 176, .7), transparent 70%),
-      radial-gradient(ellipse 55% 50% at 80% 100%, rgba(242, 184, 204, .55), transparent 70%),
-      radial-gradient(ellipse 60% 55% at 95% 10%, rgba(200, 210, 247, .85), transparent 70%),
-      linear-gradient(120deg, var(--butter-light), var(--cream) 45%, var(--peri-light));
-  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
   /* ---------- 開頭 ---------- */
   .hero {
     display: grid;
-    grid-template-columns: 1fr 1.15fr;
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 48px 20px 24px;
   }
-  .hero-art {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 32px 24px 0;
-  }
-  .hero-art svg { width: 100%; max-width: 360px; height: auto; display: block; }
-  .hero-text {
-    padding: 56px 48px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  .hero-art { display: flex; justify-content: center; }
+  .hero-art svg { width: 100%; max-width: 380px; height: auto; display: block; }
+  .hero-text { order: -1; text-align: center; padding: 24px; }
+  .hero-text .en {
+    font-family: var(--deco);
+    font-size: 1.05rem;
+    letter-spacing: .06em;
+    color: var(--accent);
+    margin: 0 0 14px;
   }
   .hero-text h1 {
     font-family: var(--serif);
-    font-weight: 700;
-    font-size: clamp(2.2rem, 5vw, 3.6rem);
-    line-height: 1.2;
-    margin: 0;
-    letter-spacing: .02em;
+    font-weight: 500;
+    font-size: clamp(2.4rem, 5.4vw, 3.8rem);
+    line-height: 1.3;
+    letter-spacing: .06em;
+    margin: 0 0 22px;
   }
-  .squiggle { display: block; width: 210px; height: 14px; margin: 6px 0 0 4px; }
-  .hero-text .rule { border: none; margin: 18px 0 4px; }
-  .hero-text p { margin: 0; font-size: 1rem; }
+  .hero-text p { margin: 0; }
+  .hero-text .when { font-size: 1.1rem; margin-bottom: 4px; }
+  .hero-text .how { color: var(--soft); font-size: .95rem; }
 
-  main { max-width: 1120px; margin: 0 auto; padding: 28px 20px 8px; }
+  /* 蘭納燈籠小貼紙 */
+  .hero-art { position: relative; }
+  .lantern, .hero-art .lantern { position: absolute; width: 50px; max-width: none; height: auto; pointer-events: none; }
+  .hero-art .lantern.a { left: 4%; top: -28px; transform: rotate(-6deg); }
+  .hero-art .lantern.b { left: 15%; top: 4px; width: 38px; transform: rotate(5deg); }
+  .finish { position: relative; }
+  .finish .lantern { right: 14%; top: 18px; transform: rotate(7deg); }
+
+  /* 慢慢跑過去的一行字 */
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    transform: rotate(-1.5deg);
+    margin: 18px -10px 8px;
+    font-family: var(--mono);
+    font-size: .95rem;
+    color: var(--soft);
+  }
+  .marquee svg { width: 1.15em; height: 1.15em; vertical-align: -.2em; margin: 0 .5em; }
+  .marquee span { display: inline-block; padding-right: 0; animation: slide 40s linear infinite; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  main { max-width: 1120px; margin: 0 auto; padding: 20px 20px 8px; }
 
   .voter {
-    border: 1.5px solid transparent;
+    max-width: 640px;
+    margin: 0 auto;
+    border: 1px solid var(--ink);
     border-radius: 999px;
-    background: rgba(255, 255, 255, .7);
-    box-shadow: 0 4px 18px rgba(120, 100, 140, .1);
-    padding: 10px 22px;
+    background: var(--cream);
+    padding: 10px 26px;
     display: flex;
     flex-wrap: wrap;
     gap: 6px 14px;
     align-items: center;
     justify-content: space-between;
   }
-  .voter b { font-weight: 700; }
-  .voter.need-name { border-color: var(--red); }
-  .voter.need-name, .voter.need-name .textbtn { color: var(--red); font-weight: 700; }
+  .voter b { color: var(--accent); }
+  .voter.need-name { border-color: var(--accent); box-shadow: var(--glow); color: var(--accent); }
+  .voter.need-name .textbtn { color: #fff; background: var(--accent); text-decoration: none; padding: 3px 16px; border-radius: 8px; }
   .textbtn {
     background: none;
     border: none;
     padding: 0;
     font: inherit;
+    font-family: var(--mono);
+    font-size: .9rem;
     color: var(--ink);
     text-decoration: underline;
-    text-underline-offset: 3px;
+    text-underline-offset: 4px;
     cursor: pointer;
   }
 
   h2 {
     text-wrap: balance;
     font-family: var(--serif);
-    font-weight: 700;
-    font-size: 1.6rem;
-    margin: 44px 0 14px;
+    font-weight: 500;
+    font-size: 1.75rem;
+    letter-spacing: .04em;
+    text-align: center;
+    margin: 72px 0 28px;
   }
 
-  /* ---------- 地圖 ---------- */
-  #map {
-    height: 440px;
-    border-radius: 18px;
-    box-shadow: 0 6px 24px rgba(120, 100, 140, .15);
+  /* 整條鮭魚粉色帶，左右延伸到螢幕邊 */
+  .band {
+    background: var(--blush);
+    margin: 72px calc(50% - 50vw) 0;
+    padding: 8px calc(50vw - 50%) 64px;
   }
-  #map .leaflet-tile-pane { filter: saturate(.55) brightness(1.06); }
-  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+  .band h2 { margin-top: 56px; }
+
+  /* ---------- 區域 ---------- */
+  .areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 22px; }
+  .area-card {
+    background: var(--cream);
+    border: 1px solid var(--ink);
+    border-radius: 32px;
+    padding: 24px 24px 22px;
+    text-align: center;
+  }
+  .area-card h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin: 0 0 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .area-card h3 span { display: block; font-family: var(--deco); font-size: .85rem; font-weight: 400; color: var(--accent); }
+  .area-card h3::before {
+    content: "";
+    display: block;
+    width: 14px; height: 14px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    background: var(--c);
+  }
+  .area-card p { margin: 0; font-size: .95rem; text-align: left; }
+  .band .map-note { text-align: center; margin: 22px auto 0; }
+
+  /* ---------- 地圖 ---------- */
+  #map { height: 460px; border: 1px solid var(--ink); border-radius: 32px; box-shadow: var(--glow); }
+  #map .leaflet-tile-pane { filter: sepia(.2) saturate(.6) brightness(1.05); }
+  .leaflet-container { font-family: var(--serif); }
+  .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 14px; margin: 18px 0 0; }
   .tag {
     display: inline-block;
-    border: 1.5px solid var(--ink);
+    border: 1px solid var(--ink);
     border-radius: 999px;
     padding: 0 12px;
     font-size: .85rem;
     line-height: 1.8;
     background: var(--c, #fff);
   }
-  .areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 14px; }
-  .area-card { background: color-mix(in srgb, var(--c) 70%, transparent); border-radius: 18px; padding: 14px 18px; }
-  .area-card h3 { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 6px; }
-  .area-card h3 span { font-family: var(--sans); font-size: .8rem; font-weight: 400; margin-left: 4px; }
-  .area-card p { margin: 0; font-size: .92rem; }
-  .lm-key { font-size: .85rem; display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; }
-  .lm-dot { width: 11px; height: 11px; border: 2px solid var(--ink); display: inline-block; }
+  .lm-key { font-size: .85rem; display: inline-flex; align-items: center; gap: 5px; }
+  .lm-dot { width: 11px; height: 11px; border: 1.5px solid var(--ink); display: inline-block; }
   .lm-dot.sight { background: var(--ink); border-radius: 50%; }
   .lm-dot.market { background: var(--butter); border-radius: 50%; }
   .lm-dot.mall { background: #fff; border-radius: 2px; }
@@ -149,24 +197,24 @@
     text-align: center;
   }
   .lm-dot.airport::before { content: "✈"; }
-  .map-note { font-size: .88rem; color: var(--soft); margin: 10px 0 0; }
+  .map-note { font-size: .88rem; color: var(--soft); margin: 12px auto 0; max-width: 46em; text-align: center; }
   .pin {
     width: 30px; height: 30px;
     border-radius: 50%;
-    border: 2px solid var(--ink);
+    border: 1.5px solid var(--ink);
     color: var(--ink);
     font-weight: 700;
     font-size: 14px;
     display: flex; align-items: center; justify-content: center;
   }
-  .leaflet-popup-content-wrapper { border-radius: 14px; border: 1.5px solid var(--ink); box-shadow: none; }
-  .leaflet-popup-tip { border: 1.5px solid var(--ink); box-shadow: none; }
-  .popup img { width: 210px; height: 120px; object-fit: cover; border-radius: 8px; display: block; margin-bottom: 8px; }
+  .leaflet-popup-content-wrapper { border-radius: 20px; border: 1px solid var(--ink); box-shadow: var(--glow); background: var(--cream); }
+  .leaflet-popup-tip { border: 1px solid var(--ink); box-shadow: none; background: var(--cream); }
+  .popup img { width: 210px; height: 120px; object-fit: cover; border-radius: 12px; display: block; margin-bottom: 8px; }
   .popup b { display: block; font-size: 1rem; }
   .landmark {
     font-size: 12px;
     background: #fff;
-    border: 1.5px solid var(--ink);
+    border: 1px solid var(--ink);
     border-radius: 999px;
     padding: 0 8px;
     box-shadow: none;
@@ -176,15 +224,15 @@
   .leaflet-marker-icon .lm-dot { display: block; }
 
   /* ---------- 篩選 ---------- */
-  .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-bottom: 18px; }
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 32px; margin-bottom: 36px; }
   .sort { display: inline-flex; align-items: center; gap: 8px; font-size: .92rem; }
   .sort select {
     appearance: none;
     -webkit-appearance: none;
-    border: 1.5px solid var(--ink);
+    border: 1px solid var(--ink);
     border-radius: 999px;
-    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%231d1d1b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
-    padding: 6px 38px 6px 16px;
+    background: var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232b2522' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+    padding: 5px 38px 5px 16px;
     font: inherit;
     color: var(--ink);
     cursor: pointer;
@@ -202,173 +250,196 @@
     cursor: pointer;
   }
   .switch .track {
-    width: 46px; height: 26px;
-    border: 1.5px solid var(--ink);
+    width: 44px; height: 24px;
+    border: 1px solid var(--ink);
     border-radius: 999px;
-    background: #fff;
+    background: var(--cream);
     position: relative;
     transition: background .15s;
   }
   .switch .knob {
     position: absolute; top: 3px; left: 3px;
-    width: 17px; height: 17px;
+    width: 16px; height: 16px;
     border-radius: 50%;
     background: var(--ink);
     transition: left .15s, background .15s;
   }
-  .switch[aria-checked="true"] .track { background: var(--red); }
+  .switch[aria-checked="true"] .track { background: var(--accent); }
   .switch[aria-checked="true"] .knob { left: 23px; background: #fff; }
-  .chip {
-    border: 1.5px solid var(--ink);
-    background: #fff;
-    border-radius: 999px;
-    padding: 5px 16px;
-    font: inherit;
-    font-size: .92rem;
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .chip.on { background: var(--ink); color: #fff; }
 
   /* ---------- 卡片 ---------- */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 22px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 40px 32px; }
   .card {
-    background: rgba(255, 255, 255, .8);
-    box-shadow: 0 6px 24px rgba(120, 100, 140, .14);
-    border-radius: 20px;
-    overflow: hidden;
+    background: var(--cream);
+    border: 1px solid var(--ink);
+    border-radius: 40px;
+    box-shadow: var(--glow);
+    padding: 30px 24px 24px;
     display: flex;
     flex-direction: column;
     scroll-margin-top: 16px;
   }
-  .card.flash { outline: 4px solid var(--butter); outline-offset: 2px; }
-  .photo { position: relative; }
-  .photo img { width: 100%; height: 210px; object-fit: cover; display: block; background: #eee; }
+  .card.flash { outline: 3px solid var(--accent); outline-offset: 6px; }
+  .photo { position: relative; width: 80%; margin: 0 auto; }
+  /* 菩提葉形狀的照片（泰國寺廟屋簷下掛的那種葉子） */
+  .photo img {
+    width: 100%;
+    aspect-ratio: 100 / 130;
+    object-fit: cover;
+    display: block;
+    background: var(--blush);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 130' preserveAspectRatio='none'%3E%3Cpath d='M50 130 C49.6 122 48.6 116 46 111 C37 100 5 85 1.5 53 C-1 27 14 8 34 5 C42 4 47 6 50 9.5 C53 6 58 4 66 5 C86 8 101 27 98.5 53 C95 85 63 100 54 111 C51.4 116 50.4 122 50 130 Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 130' preserveAspectRatio='none'%3E%3Cpath d='M50 130 C49.6 122 48.6 116 46 111 C37 100 5 85 1.5 53 C-1 27 14 8 34 5 C42 4 47 6 50 9.5 C53 6 58 4 66 5 C86 8 101 27 98.5 53 C95 85 63 100 54 111 C51.4 116 50.4 122 50 130 Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  }
+  /* 編號和泳池：貼紙 */
   .num {
-    position: absolute; top: 12px; left: 12px;
-    width: 36px; height: 36px; border-radius: 50%;
-    border: 1.5px solid var(--ink);
+    position: absolute; top: 0; left: -14px;
+    width: 46px; height: 46px; border-radius: 50%;
+    border: 1px solid var(--ink);
+    font-family: var(--deco);
     font-weight: 700;
+    font-size: 1.15rem;
     display: flex; align-items: center; justify-content: center;
+    transform: rotate(-8deg);
   }
   .pool {
-    position: absolute; top: 12px; right: 12px;
-    border: 1.5px solid var(--ink);
+    position: absolute; top: 56%; right: -18px;
+    border: 1px solid var(--ink);
     border-radius: 999px;
     padding: 0 12px;
-    font-size: .85rem;
+    font-size: .82rem;
     line-height: 1.9;
-    background: #fff;
+    background: var(--cream);
+    transform: rotate(-6deg);
   }
-  .pool.yes { background: var(--red); color: #fff; font-weight: 700; }
-  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-  .name { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; margin: 0; line-height: 1.35; }
+  .pool.yes { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .body { padding: 18px 0 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .name { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; margin: 0; line-height: 1.4; text-align: center; }
   .name a { text-decoration: none; }
-  .sold { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 0 10px; border-radius: 999px; background: var(--red); color: #fff; font-family: var(--sans); font-size: .8rem; font-weight: 700; line-height: 1.8; }
-  .name a:hover { text-decoration: underline; }
-  .price { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
-  .price small { font-family: var(--sans); font-size: .82rem; color: var(--soft); font-weight: 400; display: block; margin-top: 2px; }
+  .name a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .sold { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 0 10px; border-radius: 999px; background: var(--wine); color: #fff; font-size: .78rem; font-weight: 600; line-height: 1.8; transform: rotate(-3deg); }
+  .body > .tag { align-self: center; text-align: center; border-radius: 16px; }
+  .price {
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--accent);
+    margin-top: 6px;
+    border-top: 1px solid var(--ink);
+    padding-top: 14px;
+  }
+  .price small { font-size: .82rem; color: var(--soft); font-weight: 400; display: block; margin-top: 4px; line-height: 1.6; }
   .facts { font-size: .92rem; padding-top: 4px; margin: 2px 0 0; }
   .facts div { display: grid; grid-template-columns: 3.2em 1fr; gap: 8px; margin: 3px 0; }
-  .facts dt { color: var(--soft); }
+  .facts dt { color: var(--accent); font-weight: 600; }
   .facts dd { margin: 0; }
-  details { font-size: .9rem; background: rgba(247, 227, 138, .25); border-radius: 12px; padding: 6px 12px; }
+  details { font-size: .9rem; background: rgba(223, 233, 211, .75); border-radius: 16px; padding: 6px 14px; }
   details summary { cursor: pointer; }
   details ul { margin: 6px 0 2px; padding-left: 18px; }
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: auto; padding-top: 10px; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: auto; padding-top: 14px; }
   .heart {
-    border: 1.5px solid var(--ink);
-    background: #fff;
-    border-radius: 999px;
-    padding: 5px 16px;
+    border: 1px solid var(--accent);
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 7px 20px;
     font: inherit;
-    font-weight: 700;
-    color: var(--ink);
+    font-weight: 600;
+    color: var(--accent);
     cursor: pointer;
     white-space: nowrap;
+    transition: background .15s, color .15s;
   }
-  .heart.on { background: var(--peach); }
-  .heart:disabled { border-color: #b9b5ad; color: #9a968f; background: #f1efea; cursor: not-allowed; }
-  .voters { font-size: .85rem; color: var(--soft); flex: 1; }
-  .maplink { font-size: .88rem; white-space: nowrap; }
+  .heart:hover { background: var(--blush); }
+  .heart.on { background: var(--accent); color: #fff; }
+  .heart:disabled { border-color: #c9bfb7; color: #a1978f; background: transparent; cursor: not-allowed; }
+  .voters { display: none; }
+  .maplink { white-space: nowrap; }
 
-  .finish {
-    margin-top: 40px;
-    background: rgba(255, 255, 255, .55);
-    box-shadow: 0 6px 24px rgba(120, 100, 140, .12);
-    border-radius: 20px;
-    padding: 6px 24px 22px;
-    text-align: center;
-  }
-  .finish h2 { margin-top: 18px; }
-  .finish p { margin: 0 auto 16px; max-width: 560px; }
+  .finish { text-align: center; margin-top: 80px; }
+  .finish h2 { margin-bottom: 16px; }
+  .finish p { margin: 0 auto 22px; max-width: 560px; }
   .finish p span { display: inline-block; }
   .done-btn {
-    border: 1.5px solid var(--ink);
-    background: var(--butter);
-    color: var(--ink);
-    border-radius: 999px;
-    padding: 10px 34px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 40px;
     font: inherit;
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 600;
+    letter-spacing: .06em;
     cursor: pointer;
   }
-  .done-btn.on { background: var(--ink); color: #fff; cursor: default; }
-  .notes { font-size: .88rem; color: var(--soft); margin-top: 28px; }
+  .done-btn:hover { background: #3a5c43; }
+  .done-btn.on { background: var(--cream); color: var(--accent); border: 1px solid var(--accent); cursor: default; }
+  .notes { font-size: .88rem; color: var(--soft); margin: 36px auto 0; max-width: 46em; }
   footer {
     margin-top: 40px;
     text-align: center;
     font-size: .8rem;
+    color: var(--soft);
     padding: 18px 16px 26px;
   }
 
   dialog {
-    border: 1.5px solid var(--ink);
-    border-radius: 20px;
-    padding: 24px;
+    border: 1px solid var(--ink);
+    border-radius: 32px;
+    padding: 28px;
     max-width: 320px;
     width: 90%;
     background: var(--cream);
     color: var(--ink);
+    box-shadow: var(--glow);
+    text-align: center;
   }
-  dialog::backdrop { background: rgba(29,29,27,.35); }
-  dialog b { font-family: var(--serif); font-size: 1.2rem; }
+  dialog::backdrop { background: rgba(43, 37, 34, .35); }
+  dialog b { font-size: 1.25rem; font-weight: 600; }
   dialog input {
     width: 100%;
     font: inherit;
-    padding: 8px 12px;
-    border: 1.5px solid var(--ink);
-    border-radius: 12px;
-    margin: 12px 0 16px;
+    padding: 8px 14px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    margin: 14px 0 18px;
     background: #fff;
+    text-align: center;
   }
   dialog button {
-    background: var(--ink);
+    background: var(--accent);
     color: #fff;
     border: none;
-    border-radius: 999px;
-    padding: 7px 22px;
+    border-radius: 8px;
+    padding: 7px 28px;
     font: inherit;
+    font-weight: 600;
     cursor: pointer;
   }
 
   img { max-width: 100%; }
-  /* 粉圓體只有一種粗細，標題不再加粗，免得被瀏覽器硬加粗變糊 */
-  .hero-text h1, h2, .area-card h3, .name, .price, dialog b { font-weight: 400; }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee span { animation: none; }
+    * { transition: none !important; }
+  }
   @media (max-width: 720px) {
-    main { padding: 20px 16px 8px; }
-    h2 { font-size: 1.4rem; margin: 34px 0 12px; }
-    .finish { padding: 4px 16px 20px; }
-    .done-btn { width: 100%; max-width: 320px; }
-    .hero { grid-template-columns: 1fr; }
-    .hero-art { padding-top: 24px; }
+    main { padding: 12px 16px 8px; }
+    h2 { font-size: 1.45rem; margin: 52px 0 20px; }
+    .band { margin-top: 52px; padding-bottom: 48px; }
+    .band h2 { margin-top: 44px; }
+    .hero { grid-template-columns: 1fr; padding: 24px 20px 8px; }
+    .hero-text { order: 0; padding: 12px 0 0; }
     .hero-art svg { max-width: 260px; }
-    .hero-text { padding: 32px 24px 28px; }
-    .hero-text { text-align: center; align-items: center; }
-    .squiggle { margin: 6px auto 0; }
-    .voter { border-radius: 18px; }
-    #map { height: 420px; }
+    .voter { border-radius: 24px; padding: 10px 20px; }
+    .card { border-radius: 32px; padding: 26px 18px 20px; }
+    .pool { right: -8px; }
+    .num { left: -6px; }
+    .pool { right: -10px; }
+    .hero-art .lantern.a { left: 2%; top: -6px; width: 40px; }
+    .hero-art .lantern.b { left: 12%; top: 18px; width: 30px; }
+    .finish .lantern { right: 6%; top: 24px; width: 38px; }
+    .done-btn { width: 100%; max-width: 320px; }
+    #map { height: 420px; border-radius: 24px; }
   }
 </style>
 </head>
@@ -376,6 +447,8 @@
 
 <section class="hero">
   <div class="hero-art" aria-hidden="true">
+    <svg class="lantern a" viewBox="0 0 60 150" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g filter="url(#crayon)" fill="#f7e38a"><path d="M24 22 L10 40 L10 58 L24 76 L36 76 L50 58 L50 40 L36 22 Z"/></g><g filter="url(#crayon)" fill="#a3243b"><path d="M22 78 L19 132 L25 124 L30 138 L35 124 L41 132 L38 78 Z"/></g><g filter="url(#pencil)" stroke="#1d1d1b" stroke-width="2"><path d="M30 2 L30 15"/><path d="M22 15 L38 15 L36 22 L24 22 Z" fill="#fff"/><path d="M24 22 L10 40 L10 58 L24 76 L36 76 L50 58 L50 40 L36 22 Z"/><path d="M24 22 L24 76 M36 22 L36 76 M10 49 L50 49" stroke-width="1.3"/><path d="M22 78 L19 132 L25 124 L30 138 L35 124 L41 132 L38 78" stroke-width="1.6"/><path d="M24 92 L36 92 M24 106 L36 106" stroke-width="1.1"/></g></svg>
+    <svg class="lantern b" viewBox="0 0 60 150" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g filter="url(#crayon)" fill="#c8d2f7"><path d="M24 22 L10 40 L10 58 L24 76 L36 76 L50 58 L50 40 L36 22 Z"/></g><g filter="url(#crayon)" fill="#f5c2b0"><path d="M22 78 L19 132 L25 124 L30 138 L35 124 L41 132 L38 78 Z"/></g><g filter="url(#pencil)" stroke="#1d1d1b" stroke-width="2"><path d="M30 2 L30 15"/><path d="M22 15 L38 15 L36 22 L24 22 Z" fill="#fff"/><path d="M24 22 L10 40 L10 58 L24 76 L36 76 L50 58 L50 40 L36 22 Z"/><path d="M24 22 L24 76 M36 22 L36 76 M10 49 L50 49" stroke-width="1.3"/><path d="M22 78 L19 132 L25 124 L30 138 L35 124 L41 132 L38 78" stroke-width="1.6"/><path d="M24 92 L36 92 M24 106 L36 106" stroke-width="1.1"/></g></svg>
     <!-- 法式蠟筆插畫：酒紅屋頂、格紋遮雨棚、陽台窗、紅門、花盆 -->
     <svg viewBox="0 0 360 300" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <defs>
@@ -467,15 +540,13 @@
     </svg>
   </div>
   <div class="hero-text">
+    <p class="en">A Little Home in Chiang Mai</p>
     <h1>一起挑，<br>清邁的家。</h1>
-    <svg class="squiggle" viewBox="0 0 210 14" fill="none" stroke="#1d1d1b" stroke-width="2.5" stroke-linecap="round">
-      <path d="M2 8 C20 2 30 14 48 8 C66 2 76 14 94 8 C112 2 122 14 140 8 C158 2 168 14 186 8 C196 5 202 7 208 8" />
-    </svg>
-    <hr class="rule">
-    <p>2027/1/15（五）– 1/18（一）・3 晚</p>
-    <p>喜歡哪間就按 ♡，每人最多 5 間。</p>
+    <p class="how">喜歡哪間就按 ♡，每人最多 5 間。</p>
   </div>
 </section>
+
+<div class="marquee" aria-hidden="true"><span>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>a little home in chiang mai<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>ยินดีต้อนรับ<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg>一起挑清邁的家<svg viewBox="-12 -12 24 24"><g fill="#fff" stroke="#2b2522" stroke-width=".8"><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(0)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(72)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(144)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(216)"/><ellipse cx="2" cy="-6" rx="3.6" ry="6" transform="rotate(288)"/></g><circle r="2.6" fill="#f2c94c"/></svg></span></div>
 
 <main>
   <div class="voter">
@@ -483,6 +554,7 @@
     <button class="textbtn" id="changeName">填名字</button>
   </div>
 
+  <section class="band">
   <h2>住哪一區？</h2>
   <div class="areas">
     <div class="area-card" style="--c: var(--peri)">
@@ -499,6 +571,7 @@
     </div>
   </div>
   <p class="map-note">市區之間叫 Grab 或 Bolt 都不貴，古城到尼曼一趟大約 60–90 泰銖（泰銖和台幣約 1:1），上下班尖峰會加價，以 App 顯示為準。</p>
+  </section>
 
   <h2>住宿在哪裡</h2>
   <div id="map"></div>
@@ -529,14 +602,15 @@
   </div>
   <div class="grid" id="grid"></div>
 
-  <section class="finish">
+  <section class="finish band">
+    <svg class="lantern c" viewBox="0 0 60 150" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g filter="url(#crayon)" fill="#f5c2b0"><path d="M24 22 L10 40 L10 58 L24 76 L36 76 L50 58 L50 40 L36 22 Z"/></g><g filter="url(#crayon)" fill="#a3243b"><path d="M22 78 L19 132 L25 124 L30 138 L35 124 L41 132 L38 78 Z"/></g><g filter="url(#pencil)" stroke="#1d1d1b" stroke-width="2"><path d="M30 2 L30 15"/><path d="M22 15 L38 15 L36 22 L24 22 Z" fill="#fff"/><path d="M24 22 L10 40 L10 58 L24 76 L36 76 L50 58 L50 40 L36 22 Z"/><path d="M24 22 L24 76 M36 22 L36 76 M10 49 L50 49" stroke-width="1.3"/><path d="M22 78 L19 132 L25 124 L30 138 L35 124 L41 132 L38 78" stroke-width="1.6"/><path d="M24 92 L36 92 M24 106 L36 106" stroke-width="1.1"/></g></svg>
     <h2>投好了嗎？</h2>
     <p><span>選好後按下面的按鈕，</span><span>讓里長知道你投完了。</span></p>
     <button class="done-btn" id="doneBtn">我投好了</button>
   </section>
 
   <div class="notes">
-    <p>8 人中有 1 人 1/17 晚上去機場、只住 2 晚，所以按住幾晚分攤：每人每晚價格 = 3 晚總價 ÷ 23（7 人 × 3 晚 + 1 人 × 2 晚），四捨五入到元。住 3 晚的人付 3 晚份、住 2 晚的人付 2 晚份。總價是 2027/1/15–1/18、8 人在 Airbnb 查到的價格，實際以訂房時為準。</p>
+    <p>8人中有1人只住 2 晚，所以按住幾晚分攤：每人每晚價格 = 3晚總價 ÷ 23（7 人 × 3 晚 + 1 人 × 2 晚），四捨五入到元。住 3 晚的人付3晚份、住2晚的人付2晚份。總價是8人3 晚在Airbnb 查到的價格，實際以訂房時為準。</p>
   </div>
 </main>
 
@@ -645,7 +719,7 @@ const STAYS = [
   {
     key: "mavieng", name: "Mavieng 私人別墅", room: "1522281987320815659",
     img: "https://a0.muscache.com/im/pictures/hosting/Hosting-1522281987320815659/original/b8047736-0da4-45ee-a0d1-d3732dffea7c.png?im_w=720",
-    area: "old", areaNote: "古城北邊外 500 公尺（Santitham）", pool: false, total: 38002, lat: 18.8035, lng: 98.98106,
+    area: "old", areaNote: "古城北邊外 500 公尺", pool: false, total: 38002, lat: 18.8035, lng: 98.98106,
     rooms: "4 房・6 床・4.5 衛，最多 8 人",
     time: "15:00 入住・11:00 前退房（密碼鎖自助入住）",
     walk: "500 公尺到古城護城河，10 分鐘到塔寧市場，3 分鐘到 7-11，隔壁有咖啡廳和甜甜圈店",
